@@ -24,15 +24,20 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe 'ark'
+package 'unzip'
 
-ark 'chromedriver' do
-  url node['chromedriver']['source_url']
-  version node['chromedriver']['version']
-  owner node['chromedriver']['owner']
-  group node['chromedriver']['group']
-  mode node['chromedriver']['mode']
-  path node['chromedriver']['path']
-  file 'chromedriver'
-  action :cherry_pick
+remote_file node[:chromedriver][:full_path] do
+  source node[:chromedriver][:source_url]
+end
+
+execute 'unzip chromedriver' do
+  command "unzip -j -o #{node[:chromedriver][:full_path]} chromedriver -d #{node[:chromedriver][:path]}"
+  only_if "test -f #{node[:chromedriver][:full_path]}"
+end
+
+file "#{node[:chromedriver][:path]}/chromedriver" do
+ owner node[:chromedriver][:owner]
+ group node[:chromedriver][:group]
+ mode node[:chromedriver][:mode]
+ action :nothing
 end

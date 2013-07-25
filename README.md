@@ -9,12 +9,7 @@ Requirements
 
 Platform
 --------
-Tested on CentOS 6.4 and Ubuntu 12.04.  May support other operating systems that support the use of ark.
-
-Other
------
-
-Requires the RallySoftware-cookbooks/ark cookbook
+Tested on CentOS 6.4 and Ubuntu 12.04.
 
 Attributes
 ==========

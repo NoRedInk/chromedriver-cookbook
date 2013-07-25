@@ -2,26 +2,26 @@ require_relative 'spec_helper'
 
 describe 'chromedriver::default' do
 
-  let (:package_name) { 'chromedriver' }
-  let (:owner) { 'root' }
-  let (:group) { 'root' }
-  let (:path) { '/usr/bin' }
-  let(:chef_run) { ChefSpec::ChefRunner.new(:step_into => [:ark]) }
-
-  before do
+  def init_chef_run
+    chef_run = ChefSpec::ChefRunner.new
+    chef_run.node.set[:chromedriver][:version] = '1.0.0'
+    chef_run.node.set[:chromedriver][:archive_name]  = 'chromedriver_1.0.0.zip'
+    chef_run.node.set[:chromedriver][:source_url]  = 'https://chromedriver.googlecode.com/files/chromedriver_1.0.0.zip'
+    chef_run.node.set[:chromedriver][:path] = '/usr/bin'
+    chef_run.node.set[:chromedriver][:owner] = 'root'
+    chef_run.node.set[:chromedriver][:group] = 'root'
+    chef_run.node.set[:chromedriver][:mode] = '755'
     chef_run.converge 'chromedriver::default'
+    chef_run
   end
 
-  it 'creates chromedriver file in correct location' do
-    expect(chef_run).to install_ark(package_name, path)
+  it 'uses remote_file to download the chromedriver zip' do
+    chef_run = init_chef_run
+    expect(chef_run).to create_remote_file '/usr/bin/chromedriver_1.0.0.zip'
   end
 
-  it 'creates chromedriver file with correct ownership' do
-    expect(chef_run).to owner_group_ark(package_name, owner, group)
+  it 'will execute unzip command if file exists' do
+    chef_run = init_chef_run
+    expect(chef_run).to execute_command('unzip -j -o /usr/bin/chromedriver_1.0.0.zip chromedriver -d /usr/bin')
   end
-
-  it 'creates chromedriver file with correct permissions' do
-    expect(chef_run).to mode_ark(package_name, 755)
-  end
-
 end
