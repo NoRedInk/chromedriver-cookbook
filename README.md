@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/RallySoftware-cookbooks/chromedriver.png?branch=master)](https://travis-ci.org/RallySoftware-cookbooks/chromedriver)
-
 Description
 ===========
 Installs the chromedriver binary.
