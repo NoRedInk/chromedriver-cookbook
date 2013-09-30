@@ -1,16 +1,12 @@
-Description
-===========
+## Description
 Installs the chromedriver binary.
 
-Requirements
-============
+## Requirements
+### Platform
+* CentOS 6.4 
+* Ubuntu 12.04
 
-Platform
---------
-Tested on CentOS 6.4 and Ubuntu 12.04.
-
-Attributes
-==========
+## Attributes
 See `attributes/default.rb` for default values
 
 * `node['chromedriver']['version']` - Specifies the version of chromedriver to install
@@ -21,17 +17,11 @@ See `attributes/default.rb` for default values
 * `node['chromedriver']['group']` - Group of the installed binary
 * `node['chromedriver']['mode']` - Mode of the installed binary
 
-Recipes
-=======
-
-default
--------
-
+## Recipes
+### default
 Installs the chromedriver binary.
 
-License
-=======
-
+## License
 Copyright (c) Rally Software Development Corp. 2013
 
 Distributed under the MIT License.
