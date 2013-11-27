@@ -2,26 +2,22 @@ require_relative 'spec_helper'
 
 describe 'chromedriver::default' do
 
-  def init_chef_run
-    chef_run = ChefSpec::ChefRunner.new
-    chef_run.node.set[:chromedriver][:version] = '1.0.0'
-    chef_run.node.set[:chromedriver][:archive_name]  = 'chromedriver_1.0.0.zip'
-    chef_run.node.set[:chromedriver][:source_url]  = 'https://chromedriver.googlecode.com/files/chromedriver_1.0.0.zip'
-    chef_run.node.set[:chromedriver][:path] = '/usr/bin'
-    chef_run.node.set[:chromedriver][:owner] = 'root'
-    chef_run.node.set[:chromedriver][:group] = 'root'
-    chef_run.node.set[:chromedriver][:mode] = '755'
-    chef_run.converge 'chromedriver::default'
-    chef_run
+  subject(:chef_run) do
+    ChefSpec::Runner.new do |node|
+      node.set[:chromedriver][:version] = '1.0.0'
+      node.set[:chromedriver][:archive_name]  = 'chromedriver_1.0.0.zip'
+      node.set[:chromedriver][:source_url]  = 'https://chromedriver.googlecode.com/files/chromedriver_1.0.0.zip'
+      node.set[:chromedriver][:path] = '/usr/bin'
+      node.set[:chromedriver][:owner] = 'root'
+      node.set[:chromedriver][:group] = 'root'
+      node.set[:chromedriver][:mode] = '755'
+    end.converge 'chromedriver::default'
   end
 
-  it 'uses remote_file to download the chromedriver zip' do
-    chef_run = init_chef_run
-    expect(chef_run).to create_remote_file '/usr/bin/chromedriver_1.0.0.zip'
-  end
+  before { stub_command(/test/).and_return(true) }
 
-  it 'will execute unzip command if file exists' do
-    chef_run = init_chef_run
-    expect(chef_run).to execute_command('unzip -j -o /usr/bin/chromedriver_1.0.0.zip chromedriver -d /usr/bin')
-  end
+  it { should create_remote_file '/usr/bin/chromedriver_1.0.0.zip' }
+
+  it { chef_run.remote_file("#{chef_run.node[:chromedriver][:path]}/#{chef_run.node[:chromedriver][:archive_name]}").should notify('execute[unzip_chromedriver]').immediately }
+
 end

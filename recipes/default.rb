@@ -28,16 +28,18 @@ package 'unzip'
 
 remote_file node[:chromedriver][:full_path] do
   source node[:chromedriver][:source_url]
+  notifies :run, 'execute[unzip_chromedriver]', :immediately
 end
 
-execute 'unzip chromedriver' do
+execute 'unzip_chromedriver' do
   command "unzip -j -o #{node[:chromedriver][:full_path]} chromedriver -d #{node[:chromedriver][:path]}"
-  only_if "test -f #{node[:chromedriver][:full_path]}"
+  action :nothing
+  notifies :touch, "file[#{node[:chromedriver][:path]}/chromedriver]"
 end
 
 file "#{node[:chromedriver][:path]}/chromedriver" do
- owner node[:chromedriver][:owner]
- group node[:chromedriver][:group]
- mode node[:chromedriver][:mode]
- action :nothing
+  owner node[:chromedriver][:owner]
+  group node[:chromedriver][:group]
+  mode node[:chromedriver][:mode]
+  action :nothing
 end
