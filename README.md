@@ -25,3 +25,8 @@ Installs the chromedriver binary.
 Copyright (c) Rally Software Development Corp. 2013
 
 Distributed under the MIT License.
+
+#### UPDATE 12/27/2016:r
+This is the last public release available to Outreach, and we still rely on this
+cookbook. Pushing this to our github repo for our own usage.
+
